@@ -3,7 +3,7 @@
 Simple program to illustrate concurrency and reading JSON data from a URL.
 
 The program takes a list of airport codes as command line arguments and concurrenlty fetches the current weather
-conditions (METAR) for each airport from https://avwx.rest/ and outputs the decoded information to to STDOUT.
+conditions (METARs) for each airport from https://avwx.rest/ and outputs the decoded information to to STDOUT.
 
 Example:
 
