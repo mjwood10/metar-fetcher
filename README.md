@@ -8,7 +8,7 @@ conditions (METAR) from each airport and outputs the decoded information to to S
 Example:
 
 ~~~~
-go run main.go ksea kmem phnl
+$ go run main.go ksea kmem phnl
 ........
 Fetched: KSEA in 0.41s
 .
