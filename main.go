@@ -48,6 +48,12 @@ var conditions = map[string]string{
 	"FZ":   "freezing",
 }
 
+var cloudTypes = map[string]string{
+	"CB":    "cumulonimbus",
+	"TCU":   "towering cumulus",
+	"CBMAM": "cumulonimbus mammatus",
+}
+
 func main() {
 	start := time.Now()
 
@@ -141,10 +147,10 @@ func printMetar(metar Metar) {
 	fmt.Printf("Station:\t%s --  %s, %s -- %s\n", metar.Station, metar.Info.City, metar.Info.State, metar.Info.Name)
 	fmt.Printf("%-10s\t%s\n", "Time:", metar.Time)
 	temp, _ := strconv.ParseFloat(metar.Temperature, 32)
-	fmt.Printf("Temperature:\t%.1f\u00B0F\n", cToF(temp))
+	fmt.Printf("Temperature:\t%.1f\u00B0F / %.1f\u00B0C\n", cToF(temp), temp)
 
 	dewPoint, _ := strconv.ParseFloat(metar.Dewpoint, 64)
-	fmt.Printf("Dew Point:\t%.1f\u00B0F\n", cToF(dewPoint))
+	fmt.Printf("Dew Point:\t%.1f\u00B0F / %.1f\u00B0C\n", cToF(dewPoint), dewPoint)
 
 	windDegrees, _ := strconv.ParseInt(metar.WindDirection, 10, 32)
 	windSpeed, _ := strconv.ParseInt(metar.WindSpeed, 10, 32)
@@ -188,11 +194,17 @@ func printMetar(metar Metar) {
 	}
 
 	if len(metar.CloudLayers) > 0 {
-		fmt.Printf("Cloud Layers:")
+		fmt.Printf("Cloud Layers:\t")
 	}
-	for _, layer := range metar.CloudLayers {
+	for i, layer := range metar.CloudLayers {
 		height, _ := strconv.ParseInt(layer[1], 10, 32)
-		fmt.Printf("\t%s @ %dFT", layer[0], height*100)
+		fmt.Printf("%s @ %dFT", layer[0], height*100)
+		if len(layer) > 2 {
+			fmt.Printf(" (%s)", cloudTypes[layer[2]])
+		}
+		if i < len(metar.CloudLayers)-1 {
+			fmt.Printf(" -- ")
+		}
 	}
 	if len(metar.CloudLayers) > 0 {
 		fmt.Println()
