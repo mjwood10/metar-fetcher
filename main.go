@@ -154,7 +154,7 @@ func printMetar(metar Metar) {
 
 	windDegrees, _ := strconv.ParseInt(metar.WindDirection, 10, 32)
 	windSpeed, _ := strconv.ParseInt(metar.WindSpeed, 10, 32)
-	fmt.Printf("%-10s\t%s\u00B0 (%s) @ %dKT", "Wind:", metar.WindDirection, getDirection(windDegrees), windSpeed)
+	fmt.Printf("%-10s\t%s\u00B0 (%s) @%dKT", "Wind:", metar.WindDirection, getDirection(windDegrees), windSpeed)
 	if metar.WindGust != "" {
 		fmt.Printf(" Gusts to %sKT", metar.WindGust)
 	}
@@ -198,7 +198,7 @@ func printMetar(metar Metar) {
 	}
 	for i, layer := range metar.CloudLayers {
 		height, _ := strconv.ParseInt(layer[1], 10, 32)
-		fmt.Printf("%s @ %dFT", layer[0], height*100)
+		fmt.Printf("%s @%dFT", layer[0], height*100)
 		if len(layer) > 2 {
 			fmt.Printf(" (%s)", cloudTypes[layer[2]])
 		}
