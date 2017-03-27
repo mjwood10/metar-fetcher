@@ -140,13 +140,15 @@ func printMetar(metar Metar) {
 	}
 	fmt.Printf("Station:\t%s --  %s, %s -- %s\n", metar.Station, metar.Info.City, metar.Info.State, metar.Info.Name)
 	fmt.Printf("%-10s\t%s\n", "Time:", metar.Time)
-	temp, _ := strconv.ParseFloat(metar.Temperature, 64)
+	temp, _ := strconv.ParseFloat(metar.Temperature, 32)
 	fmt.Printf("Temperature:\t%.1f\u00B0F\n", cToF(temp))
 
 	dewPoint, _ := strconv.ParseFloat(metar.Dewpoint, 64)
 	fmt.Printf("Dew Point:\t%.1f\u00B0F\n", cToF(dewPoint))
 
-	fmt.Printf("%-10s\t%s\u00B0 @ %sKT", "Wind:", metar.WindDirection, metar.WindSpeed)
+	windDegrees, _ := strconv.ParseInt(metar.WindDirection, 10, 32)
+	windSpeed, _ := strconv.ParseInt(metar.WindSpeed, 10, 32)
+	fmt.Printf("%-10s\t%s\u00B0 (%s) @ %dKT", "Wind:", metar.WindDirection, getDirection(windDegrees), windSpeed)
 	if metar.WindGust != "" {
 		fmt.Printf(" Gusts to %sKT", metar.WindGust)
 	}
@@ -158,6 +160,12 @@ func printMetar(metar Metar) {
 
 	for i, condition := range metar.ConditionList {
 		modifier := ""
+		vicinity := false
+
+		if strings.HasPrefix(condition, "VC") {
+			vicinity = true
+			condition = condition[2:]
+		}
 		if strings.HasPrefix(condition, "-") {
 			modifier = "light "
 			condition = condition[1:]
@@ -165,7 +173,11 @@ func printMetar(metar Metar) {
 			modifier = "heavy "
 			condition = condition[1:]
 		}
+
 		fmt.Printf("%s%s", modifier, conditions[condition])
+		if vicinity {
+			fmt.Printf(" in vicinity")
+		}
 		if i < len(metar.ConditionList)-1 {
 			fmt.Printf(" -- ")
 		}
@@ -179,7 +191,7 @@ func printMetar(metar Metar) {
 		fmt.Printf("Cloud Layers:")
 	}
 	for _, layer := range metar.CloudLayers {
-		height, _ := strconv.ParseInt(layer[1], 10, 64)
+		height, _ := strconv.ParseInt(layer[1], 10, 32)
 		fmt.Printf("\t%s @ %dFT", layer[0], height*100)
 	}
 	if len(metar.CloudLayers) > 0 {
@@ -187,11 +199,50 @@ func printMetar(metar Metar) {
 	}
 
 	fmt.Printf("Visibility:\t%ssm\n", metar.Visibility)
-	pressure, _ := strconv.ParseFloat(metar.Altimeter, 64)
+	pressure, _ := strconv.ParseFloat(metar.Altimeter, 32)
 	fmt.Printf("Pressure:\t%.2finHg\n", pressure/100)
 	fmt.Printf("Flight Rules:\t%s\n", metar.FlightRules)
 	fmt.Printf("Raw Report:\t%s\n", metar.RawReport)
 	fmt.Println()
+}
+
+func getDirection(degrees int64) string {
+	switch {
+	case (degrees > 349 && degrees <= 360) || (degrees >= 0 && degrees <= 11):
+		return "N"
+	case degrees > 11 && degrees <= 34:
+		return "NNE"
+	case degrees > 34 && degrees <= 56:
+		return "NE"
+	case degrees > 56 && degrees <= 79:
+		return "ENE"
+	case degrees > 79 && degrees <= 101:
+		return "E"
+	case degrees > 101 && degrees <= 124:
+		return "ESE"
+	case degrees > 124 && degrees <= 146:
+		return "SE"
+	case degrees > 146 && degrees <= 169:
+		return "SSE"
+	case degrees > 169 && degrees <= 191:
+		return "S"
+	case degrees > 191 && degrees <= 214:
+		return "SSW"
+	case degrees > 214 && degrees <= 236:
+		return "SW"
+	case degrees > 236 && degrees <= 259:
+		return "WSW"
+	case degrees > 259 && degrees <= 281:
+		return "W"
+	case degrees > 281 && degrees <= 304:
+		return "WNW"
+	case degrees > 304 && degrees <= 326:
+		return "NW"
+	case degrees > 326 && degrees <= 349:
+		return "NNW"
+	default:
+		return ""
+	}
 }
 
 func formatICAO(icao string) string {
