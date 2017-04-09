@@ -6,6 +6,8 @@ import (
 	"strconv"
 	"time"
 
+	"sync"
+
 	"github.com/mjwood10/avwx"
 )
 
@@ -46,11 +48,20 @@ func main() {
 
 	}()
 
+	var waitGroup sync.WaitGroup
+	waitGroup.Add(len(stations))
+
 	for _, station := range stations {
-		go func(station string, ch chan *avwx.MetarResponse) {
+		go func(station string) {
 			ch <- avwx.FetchMetar(station)
-		}(station, ch)
+			waitGroup.Done()
+		}(station)
 	}
+
+	go func() {
+		waitGroup.Wait()
+		close(ch)
+	}()
 
 	for range stations {
 		resp := <-ch
@@ -62,6 +73,7 @@ func main() {
 	}
 
 	done <- true
+	close(done)
 
 	fmt.Printf("All stations fetched in %.2fs\n", time.Since(start).Seconds())
 
