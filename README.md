@@ -8,48 +8,63 @@ conditions (METARs) for each airport from https://avwx.rest/ and prints the deco
 Example:
 
 ~~~~
-$ go run main.go ksea kmem phnl
-........
-Fetched: KSEA in 0.41s
-.
-Fetched: PHNL in 0.43s
-...
-Fetched: KMEM in 0.60s
-All stations fetched in 0.60s
+$ go run main.go kdfw ksea kmem phnl
+..................
+Fetched: KDFW in 0.91s
 
-Station:	KSEA --  Seattle, WA -- Seattle-Tacoma International Airport
-Time:     	262309Z
-Temperature:	48.2°F
-Dew Point:	44.6°F
-Wind:     	100° @ 05KT
-Conditions:	light rain
-Cloud Layers:	SCT @ 800FT	BKN @ 3200FT	OVC @ 3900FT
-Visibility:	10sm
-Pressure:	29.75inHg
-Flight Rules:	VFR
-Raw Report:	KSEA 262309Z 10005KT 10SM -RA SCT008 BKN032 OVC039 09/07 A2975 RMK AO2 P0001 T00890072
+Fetched: KSEA in 0.91s
 
+Fetched: PHNL in 0.91s
+.......................................
+Fetched: KMEM in 3.02s
+All stations fetched in 3.02s
 
-Station:	KMEM --  Memphis, TN -- International Airport
-Time:     	262254Z
-Temperature:	73.4°F
-Dew Point:	51.8°F
-Wind:     	250° @ 08KT
-Cloud Layers:	FEW @ 5000FT	SCT @ 25000FT
-Visibility:	10sm
-Pressure:	29.93inHg
-Flight Rules:	VFR
-Raw Report:	KMEM 262254Z 25008KT 10SM FEW050 SCT250 23/11 A2993 RMK AO2 SLP132 T02280111
+Station:        KDFW --  Dallas, TX -- Dallas-Fort Worth International Airport
+Time:           270053Z
+Temperature:    80.6°F / 27.0°C
+Dew Point:      59.0°F / 15.0°C
+Wind:           160° (SSE) @22KT Gusts to 30KT
+Conditions:     thunderstorm
+Cloud Layers:   FEW @5000FT (cumulonimbus) -- SCT @7500FT -- BKN @17000FT -- BKN @28000FT
+Visibility:     10sm
+Pressure:       29.67inHg
+Flight Rules:   VFR
+Raw Report:     KDFW 270053Z COR 16022G30KT 10SM TS FEW050CB SCT075 BKN170 BKN280 27/15 A2967 RMK AO2 PK WND 15030/0053 LTG DSNT W-NE TS
+B29 SLP040 FRQ LTGICCG NW-N TS NW-N MOV NE T02670150
 
 
-Station:	PHNL --  Honolulu, HI -- International Airport
-Time:     	262253Z
-Temperature:	84.2°F
-Dew Point:	64.4°F
-Wind:     	060° @ 13KT Gusts to 24KT
-Cloud Layers:	FEW @ 2500FT	SCT @ 3500FT	SCT @ 5000FT
-Visibility:	10sm
-Pressure:	30.15inHg
-Flight Rules:	VFR
-Raw Report:	PHNL 262253Z 06013G24KT 10SM FEW025 SCT035 SCT050 29/18 A3015 RMK AO2 SLP209 VCSH NE T02890178 $
+Station:        KSEA --  Seattle, WA -- Seattle-Tacoma International Airport
+Time:           270053Z
+Temperature:    48.2°F / 9.0°C
+Dew Point:      44.6°F / 7.0°C
+Wind:           120° (ESE) @6KT
+Cloud Layers:   BKN @3000FT -- OVC @3600FT
+Visibility:     10sm
+Pressure:       29.74inHg
+Flight Rules:   MVFR
+Raw Report:     KSEA 270053Z 12006KT 10SM BKN030 OVC036 09/07 A2974 RMK AO2 SLP080 T00890067
+
+
+Station:        KMEM --  Memphis, TN -- International Airport
+Time:           270054Z
+Temperature:    69.8°F / 21.0°C
+Dew Point:      53.6°F / 12.0°C
+Wind:           160° (SSE) @5KT
+Cloud Layers:   FEW @20000FT -- SCT @25000FT
+Visibility:     10sm
+Pressure:       29.94inHg
+Flight Rules:   VFR
+Raw Report:     KMEM 270054Z 16005KT 10SM FEW200 SCT250 21/12 A2994 RMK AO2 SLP137 T02060117
+
+
+Station:        PHNL --  Honolulu, HI -- International Airport
+Time:           270053Z
+Temperature:    84.2°F / 29.0°C
+Dew Point:      60.8°F / 16.0°C
+Wind:           050° (NE) @18KT Gusts to 25KT
+Cloud Layers:   FEW @2600FT -- SCT @5000FT -- SCT @6000FT -- BKN @20000FT
+Visibility:     10sm
+Pressure:       30.11inHg
+Flight Rules:   VFR
+Raw Report:     PHNL 270053Z 05018G25KT 10SM FEW026 SCT050 SCT060 BKN200 29/16 A3011 RMK AO2 SLP194 T02890161 $
 ~~~~
