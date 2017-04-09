@@ -31,13 +31,19 @@ func main() {
 		stations = append(stations, formattedICAO)
 	}
 
-	done := false
+	done := make(chan bool)
 
 	go func() {
-		for !done {
-			fmt.Print(".")
-			time.Sleep(50 * time.Millisecond)
+		for {
+			select {
+			case <-done:
+				return
+			default:
+				fmt.Print(".")
+				time.Sleep(50 * time.Millisecond)
+			}
 		}
+
 	}()
 
 	for _, station := range stations {
@@ -55,7 +61,7 @@ func main() {
 		}
 	}
 
-	done = true
+	done <- true
 
 	fmt.Printf("All stations fetched in %.2fs\n", time.Since(start).Seconds())
 
