@@ -119,7 +119,3 @@ func printMetar(metar avwx.Metar) {
 	fmt.Printf("Raw Report:\t%s\n", metar.RawReport)
 	fmt.Println()
 }
-
-func cToF(c float64) float64 {
-	return c*9/5 + 32
-}
