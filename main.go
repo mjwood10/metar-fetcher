@@ -23,7 +23,12 @@ func main() {
 	ch := make(chan *avwx.MetarResponse)
 
 	for _, icao := range os.Args[1:] {
-		stations = append(stations, avwx.FormatICAO(icao))
+		formattedICAO, err := avwx.FormatICAO(icao)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
+		stations = append(stations, formattedICAO)
 	}
 
 	done := false
