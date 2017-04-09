@@ -4,9 +4,8 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	"time"
-
 	"sync"
+	"time"
 
 	"github.com/mjwood10/avwx"
 )
