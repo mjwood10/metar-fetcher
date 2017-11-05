@@ -4,14 +4,13 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	"sync"
 	"time"
 
 	"github.com/mjwood10/avwx"
 )
 
 func main() {
-	start := time.Now()
+	//start := time.Now()
 
 	if len(os.Args) < 2 {
 		fmt.Println("You know I need a list of airport codes son.")
@@ -32,7 +31,7 @@ func main() {
 		stations = append(stations, formattedICAO)
 	}
 
-	done := make(chan bool)
+	done := make(chan struct{})
 
 	go func() {
 		for {
@@ -40,27 +39,20 @@ func main() {
 			case <-done:
 				return
 			default:
-				fmt.Print(".")
-				time.Sleep(50 * time.Millisecond)
+				for _, r := range `-\|/` {
+					fmt.Printf("\r%c", r)
+					time.Sleep(50 * time.Millisecond)
+				}
 			}
 		}
 
 	}()
 
-	var waitGroup sync.WaitGroup
-	waitGroup.Add(len(stations))
-
 	for _, station := range stations {
 		go func(station string) {
 			ch <- avwx.FetchMetar(station)
-			waitGroup.Done()
 		}(station)
 	}
-
-	go func() {
-		waitGroup.Wait()
-		close(ch)
-	}()
 
 	for range stations {
 		resp := <-ch
@@ -71,10 +63,11 @@ func main() {
 		}
 	}
 
-	done <- true
 	close(done)
 
-	fmt.Printf("All stations fetched in %.2fs\n", time.Since(start).Seconds())
+	//fmt.Printf("\nAll stations fetched in %.2fs\n", time.Since(start).Seconds())
+
+	fmt.Printf("\r ")
 
 	for _, station := range stations {
 		if metar, ok := metars[station]; ok {
